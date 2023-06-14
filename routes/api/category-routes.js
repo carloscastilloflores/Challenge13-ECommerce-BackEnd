@@ -64,24 +64,24 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  Category.update(
-    {
-      // All the fields you can update and the data attached to the request body.
-      id: req.body.id,
-      category_name: req.body.category_name,
+   // All the fields you can update and the data attached to the request body
+  const category = {
+    id: req.body.id,
+    category_name: req.body.category_name,
+    products: req.body.products,
+  }
+  Category.update(category, {
+    where: {
+      id: req.params.id,
     },
-    {
-      where: {
-        id: req.params.id,
-      },
-    }
-  )
-    .then((updatedCategory) => {
-      res.json(updatedCategory);
-    })
-    .catch((err) => res.json(err))
-  // update a category by its `id` value
+  })
+    .then(() => res.json(category))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
+
 
 router.delete('/:id', async (req, res) => {
   try {
